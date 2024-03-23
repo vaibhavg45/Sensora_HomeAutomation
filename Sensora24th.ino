@@ -9,6 +9,7 @@
 #define AIO_USERNAME  "ADAFRUIT_IO_USERNAME"
 #define AIO_KEY  "ADAFRUIT_IO_KEY_HERE"
 WiFiClient client;
+
 int ctr=-1;
 Adafruit_MQTT_Client mqtt(&client, AIO_SERVER, AIO_SERVERPORT, AIO_USERNAME, AIO_KEY);
 
@@ -32,8 +33,8 @@ boolean MQTT_connect()
   } 
   return true;
 }
-Adafruit_MQTT_Publish light_Intensity = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/ldr");
-Adafruit_MQTT_Subscribe light = Adafruit_MQTT_Subscribe(&mqtt, AIO_USERNAME "/feeds/ldr");
+Adafruit_MQTT_Publish light_Intensity = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/NAME_OF_FEED_CREATED");
+Adafruit_MQTT_Subscribe light = Adafruit_MQTT_Subscribe(&mqtt, AIO_USERNAME "/feeds/NAME_OF_FEED_CREATED");
 void setup()
 {
   Serial.begin(115200);
@@ -90,8 +91,10 @@ void recv_val()
   {
     mqtt.subscribe(&light);
     Adafruit_MQTT_Subscribe *subscription;
-    while (subscription = mqtt.readSubscription(2500)) {
-      if(subscription==&light){
+    while (subscription = mqtt.readSubscription(2500)) 
+    {
+      if(subscription==&light)
+      {
         Serial.println((char*)light.lastread);
         int value = atoi((char *)light.lastread);
         digitalWrite(rel_pin, value);
